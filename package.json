@@ -1,0 +1,10 @@
+{
+  "name": "angular-login-auth-tryout",
+  "version": "1.0.0",
+  "description": "proberen met login en auth enzo",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.12.3",
+    "faker": "^2.1.3"
+  }
+}
