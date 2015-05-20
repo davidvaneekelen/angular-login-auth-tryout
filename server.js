@@ -5,10 +5,12 @@ var app = express();
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 
+var jwtSecret = 'geheimman';
+
 var user = {
 	username: 'david',
 	password: 'vaneekelen'
-}
+};
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,7 +22,14 @@ app.get('/random-user', function(req, res) {
 });
 
 app.post('/login', authenticate, function(req, res) {
-	res.send(user);
+	var token = jwt.sign({
+		username: user.username
+	}, jwtSecret);
+
+	res.send({
+		token: token,
+		user: user
+	});
 });
 
 app.listen(3030, function() {
