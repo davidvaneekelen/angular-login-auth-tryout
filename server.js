@@ -4,6 +4,7 @@ var cors = require('cors');
 var app = express();
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
+var expressJwt = require('express-jwt');
 
 var jwtSecret = 'geheimman';
 
@@ -14,6 +15,7 @@ var user = {
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(expressJwt({ secret: jwtSecret }).unless({ path: ['/login'] }));
 
 app.get('/random-user', function(req, res) {
 	var user = faker.helpers.createCard();
@@ -32,6 +34,10 @@ app.post('/login', authenticate, function(req, res) {
 	});
 });
 
+app.get('/me', function(req, res) {
+	res.send(req.user);
+});
+
 app.listen(3030, function() {
 	console.log('Server running on localhost:3030');
 });
@@ -46,4 +52,5 @@ function authenticate(req, res, next) {
 	if (body.username != user.username || body.password != user.password) {
 		res.status(401).end('Username and/or password incorrect.');
 	}
+	next();
 }
